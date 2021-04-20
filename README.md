@@ -1,6 +1,7 @@
 # DBMS_final_project
 ## Commit Info
-commit message
+commit message:
+\
 "[date]-[contributor]-[update-info]"
 
 ## Schedule
