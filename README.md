@@ -1,15 +1,16 @@
 # DBMS_final_project
+## Commit info
 
 ## Schedule
 ### 4/18~4/24
 tyhsiao
-[ ] empty task
+- [ ] empty task
 ghaad123
-[ ] empty task
+- [ ] empty task
 h40528
-[ ] empty task
+- [ ] empty task
 hsjts0u
-[ ] empty task
+- [ ] empty task
 ### 4/25~5/1
 ### 5/2~5/8
 ### 5/8~5/14
