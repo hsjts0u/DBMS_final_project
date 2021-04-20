@@ -1,5 +1,7 @@
 # DBMS_final_project
 ## Commit Info
+commit message
+"[date]-[contributor]-[update-info]"
 
 ## Schedule
 ### 4/18~4/24
