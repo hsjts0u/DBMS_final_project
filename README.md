@@ -6,20 +6,24 @@ commit message:
 
 ## Schedule
 ### 4/18~4/24
+all
+- [ ] setup environment
+
+\
 tyhsiao
-- [ ] empty task
+- [ ] Look into streamlit
 
 \
 ghaad123
-- [ ] empty task
+- [ ] Look into streamlit 
 
 \
 h40528
-- [ ] empty task
+- [ ] Database schema (.sql files)
 
 \
 hsjts0u
-- [ ] empty task
+- [ ] Python file for data fetching
 
 ### 4/25~5/1
 ### 5/2~5/8
