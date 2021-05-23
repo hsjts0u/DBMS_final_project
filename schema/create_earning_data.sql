@@ -1,5 +1,4 @@
-
-create table earning_data(
+CREATE TABLE earning_data(
     ticker varchar(20),
     2017revenue int,
     2018revenue int,

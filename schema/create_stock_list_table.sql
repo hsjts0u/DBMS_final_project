@@ -1,4 +1,4 @@
-create table stock_list(
+CREATE TABLE stock_list(
     ticker varchar(100),
     country varchar(100),
     primary key (ticker)

@@ -1,4 +1,4 @@
-create table history_stock_data(
+CREATE TABLE history_stock_data(
     id int,
     ticker varchar(20),
     day date,

@@ -1,8 +1,11 @@
 import yfinance as yf
-import mysql.connector
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="your-user",
-  password="your-password"
-)
+msft = yf.Ticker("MSFT")
+hist = msft.history(period="max")
+print(type(msft.financials))
+
+fin = msft.financials
+
+for row in fin.loc["Ebit"]:
+    print(row)
+

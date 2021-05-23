@@ -1,6 +1,4 @@
-
-
-create table info_data(
+CREATE TABLE info_data(
     ticker varchar(20),
     dividendRate float,
     beta float,
@@ -12,7 +10,6 @@ create table info_data(
     priceTobook float,
     shortRatio float,
     primary key (ticker)
-
 );
 
 

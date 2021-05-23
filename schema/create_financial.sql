@@ -8,5 +8,4 @@ CREATE TABLE financial(
     operating_income int,
     interest_expense int,
     primary key (ticker)
-    
 );
