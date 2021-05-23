@@ -1,13 +1,14 @@
 create table history_stock_data(
-    ticker int,
+    id int,
+    ticker varchar(20),
     day date,
     open float,
     high float,
     low float,
     close float,
-    adj close float,
+    adj_close float,
     volume int,
-    primary key (stock_id, date)
+    primary key (id)
 );
 
 
