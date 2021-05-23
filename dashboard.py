@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 # import fetcher
+from schema import tables
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
@@ -22,7 +23,6 @@ option = st.sidebar.selectbox('Action', ('Start Here', 'B', 'C'))
 st.header(option)
 
 if option == 'Start Here':
-    #left_column, right_column = st.beta_columns(2)
     
     st.write("Welcome to the dashboard for stock analysis. If you have not already created a database, one will be created for you in MySQL. Press the button below to initialize an empty database or connect to an existing database.")
 
@@ -37,23 +37,34 @@ if option == 'Start Here':
                 host=host,
                 user=user,
                 password=password,
-                database=mydb
+                database=dbname
             )
-            st.write("Connection Succesful !")
-        except:
-            st.write("Your database does not exist, proceed to create a new database by pressing ' Create new database! '")
+            st.success("Connection Succesful !")
+        except mysql.connector.Error:
+            st.error("Your database does not exist, proceed to create a new database by pressing ' Create new database! '")
     
     if st.button("Create new database !"):
         try:
-            mydb = mysql.connector.connect(
+            tmpdb = mysql.connector.connect(
                 host=host,
                 user=user,
                 password=password
             )
+            tmpcursor = tmpdb.cursor()
+            tmpcursor.execute(f"CREATE DATABASE {dbname}")
+            
+            mydb = mysql.connector.connect(
+                host=host,
+                user=user,
+                password=password,
+                database=dbname
+            )
             mycursor = mydb.cursor()
-            mycursor.execute(f"CREATE DATABASE {dbname}")
+            for table in tables.tables:
+                    mycursor.execute(table)
+            st.success("Creation and Connection Succesful !")
         except:
-            st.write("Oops! It seems that we are unable to connect you to MySQL.")
+            st.error("Oops! An error occurred along the way ...")
 
 if option == 'B':
     pass

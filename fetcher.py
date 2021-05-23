@@ -1,11 +1,9 @@
 import yfinance as yf
+import mysql.connector
+from schema import tables
 
-msft = yf.Ticker("MSFT")
-hist = msft.history(period="max")
-print(type(msft.financials))
+mydb = None
+mycursor = None
 
-fin = msft.financials
-
-for row in fin.loc["Ebit"]:
-    print(row)
-
+for table in tables.tables:
+    print(table)
