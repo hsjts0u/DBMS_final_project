@@ -14,11 +14,11 @@ mycursor = None
 
 # Streamlit Interface
 
-st.title("Stock Analysis")
+st.title('Stock Analysis')
 
-st.sidebar.title("Options")
+st.sidebar.title('Options')
 
-option = st.sidebar.selectbox('Action', ('Start Here', 'B', 'C'))
+option = st.sidebar.selectbox('Action', ('Start Here', 'Begin Analyzing'))
 
 st.header(option)
 
@@ -66,8 +66,10 @@ if option == 'Start Here':
         except:
             st.error("Oops! An error occurred along the way ...")
 
-if option == 'B':
-    pass
-
-if option == 'C':
-    pass
+if option == 'Begin Analyzing':
+    ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
+    if st.sidebar.button("Show me a random company !"):
+        st.sidebar.success("Now showing data for a random company")
+    st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
+    
+    
