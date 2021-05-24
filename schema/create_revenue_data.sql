@@ -1,8 +1,8 @@
-CREATE TABLE earning_data(
+CREATE TABLE revenue_data(
 	id int,
     ticker varchar(20),
     year int,
-	earning bigint,
+	revenue bigint,
     primary key (id)
 );
 
