@@ -2,25 +2,20 @@ import yfinance as yf
 from pandas import DataFrame
 
 def _fetch_earning(ticker, mydb, mycursor):
-    
-    sql = "INSERT INTO earning_data (ticker, 2017revenue, 2018revenue, 2019revenue, 2020revenue, 2017earning, 2018earning, 2019earning, 2020earning) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+    sql = "INSERT INTO earning_data (ticker, year, earning) VALUES (%s, %s, %s)"
 
     msft = yf.Ticker(ticker)
     ern = msft.earnings
 
-    val = (
-            ticker, 
-            ern.loc[2017,'Revenue'].item(), 
-            ern.loc[2018,'Revenue'].item(), 
-            ern.loc[2019,'Revenue'].item(), 
-            ern.loc[2020,'Revenue'].item(), 
-            ern.loc[2017,'Earnings'].item(), 
-            ern.loc[2018,'Earnings'].item(), 
-            ern.loc[2019,'Earnings'].item(), 
-            ern.loc[2020,'Earnings'].item()  
-          )
 
-    mycursor.execute(sql, val)
+    val = [   (ticker, ern.index[0].item(), ern.loc[ern.index[0],'Earnings'].item()),
+                (ticker, ern.index[1].item(), ern.loc[ern.index[1],'Earnings'].item()),
+                (ticker, ern.index[2].item(), ern.loc[ern.index[2],'Earnings'].item()),
+                (ticker, ern.index[3].item(), ern.loc[ern.index[3],'Earnings'].item())
+            ]
+
+    mycursor.executemany(sql, val)
     mydb.commit()
 
 
