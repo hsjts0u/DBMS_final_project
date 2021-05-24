@@ -16,7 +16,7 @@ def _fetch_earning(ticker, mydb, mycursor):
     msft = yf.Ticker(ticker)
     ern = msft.earnings
     for i in range(len(ern.index)):
-        query = "SELECT * FROM earning_data WHERE ticker='"+ ticker +"' AND year='" + str(ern.index[i].item()) + "'"
+        query = "SELECT * FROM earning_data WHERE ticker= ' " + ticker + " ' AND year=' " + str(ern.index[i].item()) + "'"
         cursor.execute(query)
         result = cursor.fetchall()
 
