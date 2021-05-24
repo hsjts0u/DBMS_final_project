@@ -23,7 +23,7 @@ tables = (
     ebit bigint,
     operating_income bigint,
     biginterest_expense bigint,
-    primary key (ticker,date)
+    primary key (ticker, date)
     )
     """,
     """
