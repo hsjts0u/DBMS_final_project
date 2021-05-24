@@ -1,13 +1,13 @@
 import streamlit as st
-import requests
-import json
-# import fetcher
+#import requests
+#import json
 from schema import tables
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import mysql.connector
 import fetch_earning
+import financial_insert_data
 
 # MySQL connection objects
 mydb = None
@@ -72,11 +72,21 @@ if option == 'Begin Analyzing':
     ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
     
     ### fetch data for ticker
-    fetch_earning._fetch_earning(ticker, mydb, mycursor)
+    # fetch_earning._fetch_earning(ticker, mydb, mycursor)
+    # financial_insert_data._fetch_financial(ticker, mydb, mycursor)
     
     if st.sidebar.button("Show me a random company !"):
         st.sidebar.success("Now showing data for a random company")
         
-    st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
+    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
+    
+    if analysis_tool == 'Company Description':
+        pass
+    
+    if analysis_tool == 'Historical Prices':
+        pass
+    
+    if analysis_tool == 'Growth Rate':
+        pass
     
     
