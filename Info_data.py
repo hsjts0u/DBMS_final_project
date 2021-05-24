@@ -43,5 +43,5 @@ for i in stk_info_df.index:
     except:
         failed_list.append(i)
         continue
-stk_info_df.to_csv('Result.csv')
+stk_info_df.to_csv('Info_data.csv')
 

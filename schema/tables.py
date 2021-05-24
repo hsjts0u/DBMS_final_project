@@ -50,7 +50,7 @@ tables = (
     longName varchar(100),
     forwardEps float,
     bookValue float,
-    priceTobook float,
+    priceToBook float,
     shortRatio float,
     primary key (ticker)
     )
