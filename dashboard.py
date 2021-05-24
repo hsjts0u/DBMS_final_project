@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import mysql.connector
+import fetch_earning
 
 # MySQL connection objects
 mydb = None
@@ -67,9 +68,15 @@ if option == 'Start Here':
             st.error("Oops! An error occurred along the way ...")
 
 if option == 'Begin Analyzing':
+    
     ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
+    
+    ### fetch data for ticker
+    fetch_earning._fetch_earning(ticker, mydb, mycursor)
+    
     if st.sidebar.button("Show me a random company !"):
         st.sidebar.success("Now showing data for a random company")
+        
     st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
     
     
