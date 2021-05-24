@@ -4,29 +4,23 @@ commit message:
 \
 "[date]-[contributor]-[update-info]"
 
-## Schedule
-### 4/18~4/24
-all
-- [ ] setup environment
+## Run
+streamlit run dashboard.py
 
-\
-tyhsiao
-- [ ] Look into streamlit
 
-\
-ghaad123
-- [ ] Look into streamlit 
+## Status
+project status
+data to database => Thu
+analyze data, show data on streamlit => Fri, Sat, Sun
 
-\
-h40528
-- [ ] Database schema (.sql files)
+state:
+    choose ticker:
+	try to query =>
+	    no result = empty database:
+		grab data from yfinance, then query again
+ 	    has result = non-empty database:
+		query using info from database
+		up to user => update database
 
-\
-hsjts0u
-- [ ] Python file for data fetching
-
-### 4/25~5/1
-### 5/2~5/8
-### 5/8~5/14
-### 5/15~5/21
-### 5/22~5/28
+empty => grab up to date info
+non-empty => no auto update => user select update button
