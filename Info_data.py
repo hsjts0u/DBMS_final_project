@@ -1,5 +1,4 @@
 import yfinance as yf
-import json
 import requests
 import time
 import numpy as np
@@ -25,7 +24,6 @@ stk_info_df = pd.DataFrame(index = stk_list.sort_values(), columns = info_column
 
 failed_list = []
 
-count = 0
 for i in stk_info_df.index:
     try:
         # 打印出目前進度
