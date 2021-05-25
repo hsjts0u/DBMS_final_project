@@ -1,7 +1,4 @@
 import yfinance as yf
-import numpy as np
-import mysql.connector 
-import streamlit as st
 
 def _fetch_financial(ticker, mydb, mycursor):
     sql = "INSERT INTO financial VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -15,13 +12,6 @@ def _fetch_financial(ticker, mydb, mycursor):
         dic[i] = symb.financials.loc[i]
     
     for i in range(len(dic['Research Development'])):
-        try:
-            temp = dic['Research Development'].index[i].strftime('%Y-%m-%d')
-            query = "SELECT * FROM financial WHERE ticker='"+ ticker +"' AND date='" + temp + "'"
-            mycursor.execute(query)
-            result = mycursor.fetchall()
-        except mysql.connector.Error as err:
-            st.sidebar.error("Something went wrong: {}".format(err))
         temp = dic['Research Development'].index[i].strftime('%Y-%m-%d')
         query = "SELECT * FROM financial WHERE ticker='"+ ticker +"' AND date='" + temp + "'"
         mycursor.execute(query)

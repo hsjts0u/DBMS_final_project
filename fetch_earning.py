@@ -1,5 +1,4 @@
 import yfinance as yf
-import mysql.connector
 
 
 def _fetch_earning(ticker, mydb, mycursor):

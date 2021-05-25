@@ -1,6 +1,4 @@
 import yfinance as yf
-import mysql.connector
-import streamlit as st
 
 def _fetch_info(ticker, mydb, mycursor):
     query = "SELECT * FROM info_data WHERE ticker='"+ ticker +"'"

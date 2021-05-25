@@ -1,18 +1,11 @@
 import streamlit as st
-#import requests
-#import json
 from schema import tables
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import mysql.connector
-
-import fetch_financial
-import fetch_info
-import fetch_earning
-import fetch_history
-import fetch_revenue
-
+import fetch
+#import fetch_history
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -20,10 +13,6 @@ def db_cursor_cache():
     return []
 
 db_objects = db_cursor_cache()
-
-mydb = None
-mycursor = None
-
 
 # Streamlit Interface
 
@@ -53,10 +42,12 @@ if option == 'Start Here':
                 database=dbname
             )
             st.success("Connection Succesful !")
-
+            
+            # cache db and cursor
             mycursor = mydb.cursor
             db_objects.append(mydb)
             db_objects.append(mycursor)
+            
         except mysql.connector.Error:
             st.error("Your database does not exist, proceed to create a new database by pressing ' Create new database! '")
     
@@ -78,6 +69,7 @@ if option == 'Start Here':
             )
             mycursor = mydb.cursor()
             
+            # cache db and cursor
             db_objects.append(mydb)
             db_objects.append(mycursor)
             for table in tables.tables:
@@ -96,11 +88,11 @@ if option == 'Begin Analyzing':
     ### update data for ticker
     if st.sidebar.button("Update info for this company"):
         try:
-            fetch_info._fetch_info(ticker, mydb, mycursor)
-            fetch_financial._fetch_financial(ticker, mydb, mycursor)
-            fetch_earning._fetch_earning(ticker, mydb, mycursor)
-            fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
-            fetch_history._fetch_history(ticker, mydb, mycursor)
+            fetch._fetch_info(ticker, mydb, mycursor)
+            fetch._fetch_financial(ticker, mydb, mycursor)
+            fetch._fetch_earning(ticker, mydb, mycursor)
+            fetch._fetch_revenue(ticker, mydb, mycursor)
+            fetch._fetch_history(ticker, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
     

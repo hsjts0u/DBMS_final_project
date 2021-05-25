@@ -1,9 +1,6 @@
 import yfinance as yf
 import datetime
-import time
-import numpy as np
-import pandas as pd
-import mysql.connector
+#import time
 
 def _fetch_history(ticker, mydb, mycursor):
     sql = "INSERT INTO history_stock_data VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -13,7 +10,6 @@ def _fetch_history(ticker, mydb, mycursor):
     
     for i in range(len(symb.index)):
         temp = symb.index[i].strftime('%Y-%m-%d')
-
         query = "SELECT * FROM history_stock_data WHERE ticker='"+ticker+"' AND day='"+temp+"'"
         mycursor.execute(query)
         result = mycursor.fetchall()
