@@ -1,5 +1,6 @@
 import yfinance as yf
 import mysql.connector
+import streamlit as st
 
 #mydb = mysql.connector.connect(
     #host="localhost",
@@ -11,9 +12,14 @@ import mysql.connector
 #cursor = mydb.cursor()
 
 def _fetch_info(ticker, mydb, mycursor):
+    st.write(ticker)
+    st.write(mydb)
+    st.write(mycursor)
     query = "SELECT * FROM info_data WHERE ticker='"+ ticker +"'"
     cursor.execute(query)
     result = cursor.fetchall()
+    st.write(result)
+    print(result)
     if not result:   
         sql = "INSERT INTO info_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         info_dict = yf.Ticker(ticker).info
