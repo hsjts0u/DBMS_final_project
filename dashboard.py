@@ -6,8 +6,12 @@ from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import mysql.connector
-import update_financial
-import update_info
+
+import fetch_financial
+import fetch_info
+import fetch_earning
+import fetch_history
+import fetch_revenue
 
 # MySQL connection objects
 mydb = None
@@ -73,9 +77,14 @@ if option == 'Begin Analyzing':
     
     ### update data for ticker
     if st.sidebar.button("Update info for this company"):
-        pass
-        # update_info._update_info(ticker, mydb, mycursor)
-        # update_financial._update_financial(ticker, mydb, mycursor)
+        try:
+            fetch_info._fetch_info(ticker, mydb, mycursor)
+            fetch_financial._fetch_financial(ticker, mydb, mycursor)
+            fetch_earning._fetch_earning(ticker, mydb, mycursor)
+            fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
+            fetch_history._fetch_history(ticker, mydb, mycursor)
+        except:
+            st.sidebar.error("something went wrong")
     
     #if st.sidebar.button("Show me a random company !"):
     #    st.sidebar.success("Now showing data for a random company")
