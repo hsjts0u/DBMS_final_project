@@ -11,11 +11,9 @@ def _fetch_history(ticker, mydb, mycursor):
     
     for i in range(len(symb.index)):
         temp = symb.index[i].strftime('%Y-%m-%d')
-  #      st.write(temp)
         query = "SELECT * FROM history_stock_data WHERE ticker='"+ticker+"' AND day='"+temp+"'"
         mycursor.execute(query)
         result = mycursor.fetchall()
-#        st.write(result)
         if not result :
             val = ( ticker, temp, symb['Open'][i].item(), symb['High'][i].item(), symb['Low'][i].item(), symb['Close'][i].item(), symb['Volume'][i].item() )
             mycursor.execute(sql, val)
@@ -67,7 +65,7 @@ def _fetch_earning(ticker, mydb, mycursor):
     msft = yf.Ticker(ticker)
     ern = msft.earnings
     for i in range(len(ern.index)):
-        query = "SELECT * FROM earning_data WHERE ticker= ' " + ticker + " ' AND year=' " + str(ern.index[i].item()) + "'"
+        query = "SELECT * FROM earning_data WHERE ticker= '" + ticker + "' AND year='" + str(ern.index[i].item()) + "'"
         mycursor.execute(query)
         result = mycursor.fetchall()
 
@@ -85,7 +83,7 @@ def _fetch_revenue(ticker, mydb, mycursor):
     ern = msft.earnings
 
     for i in range(len(ern.index)):
-        query = "SELECT * FROM revenue_data WHERE ticker= ' " + ticker + " ' AND year=' " + str(ern.index[i].item()) + "'"
+        query = "SELECT * FROM revenue_data WHERE ticker= '" + ticker + "' AND year='" + str(ern.index[i].item()) + "'"
         mycursor.execute(query)
         result = mycursor.fetchall()
 
