@@ -108,7 +108,7 @@ if option == 'Begin Analyzing':
     analysis_tool = st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
     
     if analysis_tool == 'Company Description':
-        description.objects()
+        description.objects(ticker, mydb)
     
     if analysis_tool == 'Historical Prices':
         pass
