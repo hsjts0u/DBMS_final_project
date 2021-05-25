@@ -5,7 +5,8 @@ import pandas as pd
 import numpy as np
 import mysql.connector
 import fetch
-#import fetch_history
+import description
+
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -80,8 +81,11 @@ if option == 'Start Here':
 
 if option == 'Begin Analyzing':
     ### retrieve db and cursor
-    mydb = db_objects[0]
-    mycursor = db_objects[1]
+    try:
+        mydb = db_objects[0]
+        mycursor = db_objects[1]
+    except:
+        st.sidebar.error("Connect to a database first")
     
     ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
     
@@ -102,7 +106,7 @@ if option == 'Begin Analyzing':
     analysis_tool = st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
     
     if analysis_tool == 'Company Description':
-        pass
+        description.objects()
     
     if analysis_tool == 'Historical Prices':
         pass
