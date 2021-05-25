@@ -14,17 +14,16 @@ import fetch_history
 import fetch_revenue
 
 # MySQL connection objects
-<<<<<<< HEAD
 
 @st.cache(allow_output_mutation=True)
 def db_cursor_cache():
     return []
 
 db_objects = db_cursor_cache()
-=======
+
 mydb = None
 mycursor = None
->>>>>>> 1b645f2c88784a710567e94d8fc633e78f164962
+
 
 # Streamlit Interface
 
@@ -54,12 +53,10 @@ if option == 'Start Here':
                 database=dbname
             )
             st.success("Connection Succesful !")
-<<<<<<< HEAD
+
             mycursor = mydb.cursor
             db_objects.append(mydb)
             db_objects.append(mycursor)
-=======
->>>>>>> 1b645f2c88784a710567e94d8fc633e78f164962
         except mysql.connector.Error:
             st.error("Your database does not exist, proceed to create a new database by pressing ' Create new database! '")
     

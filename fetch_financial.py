@@ -23,7 +23,6 @@ def _fetch_financial(ticker, mydb, mycursor):
         dic[i] = symb.financials.loc[i]
     
     for i in range(len(dic['Research Development'])):
-<<<<<<< HEAD
         try:
             temp = dic['Research Development'].index[i].strftime('%Y-%m-%d')
             query = "SELECT * FROM financial WHERE ticker='"+ ticker +"' AND date='" + temp + "'"
@@ -31,13 +30,11 @@ def _fetch_financial(ticker, mydb, mycursor):
             result = mycursor.fetchall()
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
-=======
         temp = dic['Research Development'].index[i].strftime('%Y-%m-%d')
         query = "SELECT * FROM financial WHERE ticker='"+ ticker +"' AND date='" + temp + "'"
         mycursor.execute(query)
         result = mycursor.fetchall()
         
->>>>>>> 1b645f2c88784a710567e94d8fc633e78f164962
         if not result :
             val = ( ticker, temp, dic['Research Development'][i], dic['Net Income'][i], dic['Gross Profit'][i], dic['Ebit'][i], dic['Operating Income'][i], dic['Interest Expense'][i] )
             mycursor.execute(sql, val)
