@@ -2,14 +2,6 @@ import yfinance as yf
 import numpy as np
 import mysql.connector 
 import streamlit as st
-#mydb = mysql.connector.connect(
-    #host="localhost",
-    #user="root",
-    #password="",
-    #database="db_stock"
-#)
-
-#mycursor = mydb.cursor()
 
 def _fetch_financial(ticker, mydb, mycursor):
     sql = "INSERT INTO financial VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"

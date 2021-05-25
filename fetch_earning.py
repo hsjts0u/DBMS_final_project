@@ -1,14 +1,6 @@
 import yfinance as yf
 import mysql.connector
 
-#mydb = mysql.connector.connect(
-    #host="localhost",
-    #user="root",
-    #password="",
-    #database="db_stock"
-#)
-
-#mycursor = mydb.cursor()
 
 def _fetch_earning(ticker, mydb, mycursor):
 
@@ -25,7 +17,6 @@ def _fetch_earning(ticker, mydb, mycursor):
             mycursor.execute(sql, val)
             mydb.commit()
 
-#_fetch_earning('MSFT', mydb, mycursor)
 
 
 

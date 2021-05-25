@@ -1,15 +1,6 @@
 import yfinance as yf
 import mysql.connector
 
-#mydb = mysql.connector.connect(
-    #host="localhost",
-    #user="root",
-    #password="",
-    #database="db_stock"
-#)
-
-#mycursor = mydb.cursor()
-
 def _fetch_revenue(ticker, mydb, mycursor):
 
     sql = "INSERT INTO revenue_data (ticker, year, revenue) VALUES (%s, %s, %s)"
@@ -25,11 +16,6 @@ def _fetch_revenue(ticker, mydb, mycursor):
             val = ( ticker, ern.index[i].item(), ern.loc[ern.index[i],'Revenue'].item() )
             mycursor.execute(sql, val)
             mydb.commit()
-
-#_fetch_revenue('MSFT', mydb, mycursor)
-
-
-
 
 
 

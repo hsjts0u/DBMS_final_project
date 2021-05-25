@@ -96,11 +96,11 @@ if option == 'Begin Analyzing':
     ### update data for ticker
     if st.sidebar.button("Update info for this company"):
         try:
-            #fetch_info._fetch_info(ticker, mydb, mycursor)
+            fetch_info._fetch_info(ticker, mydb, mycursor)
             fetch_financial._fetch_financial(ticker, mydb, mycursor)
-            #fetch_earning._fetch_earning(ticker, mydb, mycursor)
-            #fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
-            #fetch_history._fetch_history(ticker, mydb, mycursor)
+            fetch_earning._fetch_earning(ticker, mydb, mycursor)
+            fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
+            fetch_history._fetch_history(ticker, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
     
