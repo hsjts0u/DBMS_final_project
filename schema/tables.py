@@ -52,7 +52,7 @@ tables = (
     bookValue float,
     priceToBook float,
     shortRatio float,
-    longBusinessSummary varchar(1000),
+    longBusinessSummary varchar(5000),
     logo_url varchar(1000),
     primary key (ticker)
     )
