@@ -3,17 +3,19 @@ import datetime
 
 
 def _fetch_history(ticker, mydb, mycursor):
+    mycursor = mydb.cursor()
     sql = "INSERT INTO history_stock_data VALUES (%s, %s, %s, %s, %s, %s, %s)"
     dic = {} 
-        
+    
     symb = yf.Ticker(ticker).history(start = "2000-01-03", end = datetime.date.today())
     
     for i in range(len(symb.index)):
         temp = symb.index[i].strftime('%Y-%m-%d')
+  #      st.write(temp)
         query = "SELECT * FROM history_stock_data WHERE ticker='"+ticker+"' AND day='"+temp+"'"
         mycursor.execute(query)
         result = mycursor.fetchall()
-        
+#        st.write(result)
         if not result :
             val = ( ticker, temp, symb['Open'][i].item(), symb['High'][i].item(), symb['Low'][i].item(), symb['Close'][i].item(), symb['Volume'][i].item() )
             mycursor.execute(sql, val)
@@ -21,6 +23,7 @@ def _fetch_history(ticker, mydb, mycursor):
             
     
 def _fetch_info(ticker, mydb, mycursor):
+    mycursor = mydb.cursor()
     query = "SELECT * FROM info_data WHERE ticker='"+ ticker +"'"
     mycursor.execute(query)
     result = mycursor.fetchall()
@@ -35,6 +38,7 @@ def _fetch_info(ticker, mydb, mycursor):
         
 
 def _fetch_financial(ticker, mydb, mycursor):
+    mycursor = mydb.cursor()
     sql = "INSERT INTO financial VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     dic = {} 
     mycursor = mydb.cursor()
@@ -58,7 +62,7 @@ def _fetch_financial(ticker, mydb, mycursor):
 
 
 def _fetch_earning(ticker, mydb, mycursor):
-
+    mycursor = mydb.cursor()
     sql = "INSERT INTO earning_data (ticker, year, earning) VALUES (%s, %s, %s)"
     msft = yf.Ticker(ticker)
     ern = msft.earnings
@@ -75,7 +79,7 @@ def _fetch_earning(ticker, mydb, mycursor):
 
 
 def _fetch_revenue(ticker, mydb, mycursor):
-
+    mycursor = mydb.cursor()
     sql = "INSERT INTO revenue_data (ticker, year, revenue) VALUES (%s, %s, %s)"
     msft = yf.Ticker(ticker)
     ern = msft.earnings

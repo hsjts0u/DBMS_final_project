@@ -73,7 +73,7 @@ if option == 'Start Here':
             db_objects.append(mydb)
             db_objects.append(mycursor)
             for table in tables.tables:
-                    mycursor.execute(table)
+                mycursor.execute(table)
             st.success("Creation and Connection Succesful !")
         except:
             st.error("Oops! An error occurred along the way ...")
