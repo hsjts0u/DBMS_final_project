@@ -17,11 +17,9 @@ import fetch_revenue
 
 @st.cache(allow_output_mutation=True)
 def db_cursor_cache():
-    mydb = None
-    mycursor = None
-    return mydb, mycursor
+    return []
 
-mydb, mycursor = db_cursor_cache()
+db_objects = db_cursor_cache()
 
 # Streamlit Interface
 
@@ -52,6 +50,8 @@ if option == 'Start Here':
             )
             st.success("Connection Succesful !")
             mycursor = mydb.cursor
+            db_objects.append(mydb)
+            db_objects.append(mycursor)
         except mysql.connector.Error:
             st.error("Your database does not exist, proceed to create a new database by pressing ' Create new database! '")
     
@@ -72,6 +72,9 @@ if option == 'Start Here':
                 database=dbname
             )
             mycursor = mydb.cursor()
+            
+            db_objects.append(mydb)
+            db_objects.append(mycursor)
             for table in tables.tables:
                     mycursor.execute(table)
             st.success("Creation and Connection Succesful !")
@@ -79,19 +82,22 @@ if option == 'Start Here':
             st.error("Oops! An error occurred along the way ...")
 
 if option == 'Begin Analyzing':
+    ### retrieve db and cursor
+    mydb = db_objects[0]
+    mycursor = db_objects[1]
     
     ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
     
     ### update data for ticker
     if st.sidebar.button("Update info for this company"):
         try:
-            fetch_info._fetch_info(ticker, mydb, mycursor)
+            #fetch_info._fetch_info(ticker, mydb, mycursor)
             fetch_financial._fetch_financial(ticker, mydb, mycursor)
-            fetch_earning._fetch_earning(ticker, mydb, mycursor)
-            fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
-            fetch_history._fetch_history(ticker, mydb, mycursor)
-        except:
-            st.sidebar.error("something went wrong")
+            #fetch_earning._fetch_earning(ticker, mydb, mycursor)
+            #fetch_revenue._fetch_revenue(ticker, mydb, mycursor)
+            #fetch_history._fetch_history(ticker, mydb, mycursor)
+        except mysql.connector.Error as err:
+            st.sidebar.error("Something went wrong: {}".format(err))
     
     #if st.sidebar.button("Show me a random company !"):
     #    st.sidebar.success("Now showing data for a random company")

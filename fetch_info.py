@@ -16,10 +16,10 @@ def _fetch_info(ticker, mydb, mycursor):
     st.write(mydb)
     st.write(mycursor)
     query = "SELECT * FROM info_data WHERE ticker='"+ ticker +"'"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    mycursor.execute(query)
+    result = mycursor.fetchall()
     st.write(result)
-    print(result)
+    st.write("here")
     if not result:   
         sql = "INSERT INTO info_data VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         info_dict = yf.Ticker(ticker).info
