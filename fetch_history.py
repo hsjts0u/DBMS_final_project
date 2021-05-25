@@ -12,7 +12,7 @@ import mysql.connector
 #  database="db_stock"
 #)
 
-#cursor = mydb.cursor()
+#mycursor = mydb.cursor()
 
 def _fetch_history(ticker, mydb, mycursor):
     sql = "INSERT INTO history_stock_data VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -22,6 +22,7 @@ def _fetch_history(ticker, mydb, mycursor):
    
     for i in range(len(symb.index)):
         temp = symb.index[i].strftime('%Y-%m-%d')
+<<<<<<< Updated upstream
         query = "SELECT * FROM history_stock_data WHERE ticker='"+ticker+"' AND day='"+temp+"'"
         cursor.execute(query)
         result = cursor.fetchall()
@@ -30,6 +31,11 @@ def _fetch_history(ticker, mydb, mycursor):
             val = ( ticker, temp, symb['Open'][i].item(), symb['High'][i].item(), symb['Low'][i].item(), symb['Close'][i].item(), symb['Volume'][i].item() )
             cursor.execute(sql, val)
             mydb.commit()
+=======
+        val = ( ticker, temp, symb['Open'][i].item(), symb['High'][i].item(), symb['Low'][i].item(), symb['Close'][i].item(), symb['Volume'][i].item() )
+        mycursor.execute(sql, val)
+        mydb.commit()
+>>>>>>> Stashed changes
     
-#_fetch_history('AAPL', mydb,cursor)
+#_fetch_history('AAPL', mydb,mycursor)
 

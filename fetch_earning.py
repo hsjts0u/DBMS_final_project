@@ -8,7 +8,7 @@ import mysql.connector
     #database="db_stock"
 #)
 
-#cursor = mydb.cursor()
+#mycursor = mydb.cursor()
 
 def _fetch_earning(ticker, mydb, mycursor):
 
@@ -17,15 +17,15 @@ def _fetch_earning(ticker, mydb, mycursor):
     ern = msft.earnings
     for i in range(len(ern.index)):
         query = "SELECT * FROM earning_data WHERE ticker= ' " + ticker + " ' AND year=' " + str(ern.index[i].item()) + "'"
-        cursor.execute(query)
-        result = cursor.fetchall()
+        mycursor.execute(query)
+        result = mycursor.fetchall()
 
         if not result:
             val = ( ticker, ern.index[i].item(), ern.loc[ern.index[i],'Earnings'].item() )
             mycursor.execute(sql, val)
             mydb.commit()
 
-#_fetch_earning('MSFT', mydb, cursor)
+#_fetch_earning('MSFT', mydb, mycursor)
 
 
 

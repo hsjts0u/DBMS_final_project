@@ -9,15 +9,15 @@ import streamlit as st
     #database="db_stock"
 #)
 
-#cursor = mydb.cursor()
+#mycursor = mydb.cursor()
 
 def _fetch_info(ticker, mydb, mycursor):
     st.write(ticker)
     st.write(mydb)
     st.write(mycursor)
     query = "SELECT * FROM info_data WHERE ticker='"+ ticker +"'"
-    cursor.execute(query)
-    result = cursor.fetchall()
+    mycursor.execute(query)
+    result = mycursor.fetchall()
     st.write(result)
     print(result)
     if not result:   
@@ -26,8 +26,8 @@ def _fetch_info(ticker, mydb, mycursor):
         
         val = (ticker, info_dict['dividendRate'], info_dict['beta'], info_dict['52WeekChange'], info_dict['shortName'], info_dict['longName'], info_dict['forwardEps'], info_dict['bookValue'], info_dict['priceToBook'], info_dict['shortRatio'])
         
-        cursor.execute(sql, val)
+        mycursor.execute(sql, val)
         mydb.commit()
 
 
-#_fetch_info("AMZN", mydb, cursor)
+#_fetch_info("AMZN", mydb, mycursor)

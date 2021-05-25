@@ -9,7 +9,7 @@ import mysql.connector
     #database="db_stock"
 #)
 
-#cursor = mydb.cursor()
+#mycursor = mydb.cursor()
 
 def _fetch_financial(ticker, mydb, mycursor):
     sql = "INSERT INTO financial VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -24,11 +24,11 @@ def _fetch_financial(ticker, mydb, mycursor):
     for i in range(len(dic['Research Development'])):
         temp = dic['Research Development'].index[i].strftime('%Y-%m-%d')
         query = "SELECT * FROM financial WHERE ticker='"+ ticker +"' AND date='" + temp + "'"
-        cursor.execute(query)
-        result = cursor.fetchall()
+        mycursor.execute(query)
+        result = mycursor.fetchall()
         
         if not result :
             val = ( ticker, temp, dic['Research Development'][i], dic['Net Income'][i], dic['Gross Profit'][i], dic['Ebit'][i], dic['Operating Income'][i], dic['Interest Expense'][i] )
-            cursor.execute(sql, val)
+            mycursor.execute(sql, val)
             mydb.commit()
         
