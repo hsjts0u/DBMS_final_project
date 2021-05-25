@@ -6,7 +6,7 @@ import numpy as np
 import mysql.connector
 import fetch
 import description
-
+import price
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -111,8 +111,8 @@ if option == 'Begin Analyzing':
         description.objects(ticker, mydb)
     
     if analysis_tool == 'Historical Prices':
-        pass
-    
+        price.objects(ticker, mydb)
+
     if analysis_tool == 'Growth Rate':
         pass
     
