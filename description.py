@@ -1,4 +1,5 @@
 import streamlit as st
 
 def objects():
-    return
+    st.header('Company Description')
+    

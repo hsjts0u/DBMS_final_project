@@ -23,9 +23,11 @@ st.sidebar.title('Options')
 
 option = st.sidebar.selectbox('Action', ('Start Here', 'Begin Analyzing'))
 
-st.header(option)
+
 
 if option == 'Start Here':
+    
+    st.header('Start Here')
     
     st.write("Welcome to the dashboard for stock analysis. If you have not already created a database, one will be created for you in MySQL. Press the button below to initialize an empty database or connect to an existing database.")
 
