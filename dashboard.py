@@ -8,6 +8,7 @@ import fetch
 import description
 import price
 import growth
+import requests
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -22,7 +23,7 @@ st.title('Stock Analysis')
 
 st.sidebar.title('Options')
 
-option = st.sidebar.selectbox('Action', ('Start Here', 'Begin Analyzing'))
+option = st.sidebar.selectbox('Action', ('Start Here', 'Big Picture', 'Begin Analyzing'))
 
 
 
@@ -89,7 +90,7 @@ if option == 'Begin Analyzing':
         mycursor = db_objects[1]
     except:
         st.sidebar.error("Connect to a database first")
-    
+        
     ticker = st.sidebar.text_input('Ticker', value='2330.TW', max_chars=None, key=None, type='default', help='Enter the company ticker here')
     
     ### update data for ticker
@@ -117,4 +118,26 @@ if option == 'Begin Analyzing':
     if analysis_tool == 'Growth Rate':
         growth.objects(ticker, mydb)
     
+if option == 'Big Picture': 
+    ### retrieve db and cursor
+    try:
+        mydb = db_objects[0]
+        mycursor = db_objects[1]
+    except:
+        st.sidebar.error("Connect to a database first")
     
+    ###show the recent stock market
+    url = 'https://www.slickcharts.com/sp500'
+    headers = {"User-Agent" : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
+
+    request = requests.get(url, headers = headers)
+
+    data = pd.read_html(request.text)[0]
+    stock_list = data.Symbol.apply(lambda x: x.replace('.', '-'))
+    #st.write(stock_list)
+    if st.sidebar.button("quick start", help = 'Get the recent 30 days data from SP500'):
+        try:
+            for i in stock_list:
+                fetch._fetch_recent(i, mydb, mycursor)
+        except mysql.connector.Error as err:
+            st.sidebar.error("Something went wrong: {}".format(err))
