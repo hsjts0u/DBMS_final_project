@@ -9,6 +9,8 @@ import description
 import price
 import prediction
 import growth
+import up_most
+import down_most
 import requests
 # MySQL connection objects
 
@@ -138,9 +140,20 @@ if option == 'Big Picture':
     data = pd.read_html(request.text)[0]
     stock_list = data.Symbol.apply(lambda x: x.replace('.', '-'))
     #st.write(stock_list)
-    if st.sidebar.button("quick start", help = 'Get the recent 30 days data from SP500'):
+    if st.sidebar.button("Quick start", help = 'Get the recent 30 days data from SP500'):
         try:
             for i in stock_list:
                 fetch._fetch_recent(i, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
+    
+    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('30日內最大漲幅', '30日內最大跌幅', 'Growth Rate', 'Prediction'))
+    
+    if analysis_tool == '30日內最大漲幅':
+        up_most.objects(mydb)
+    
+    if analysis_tool == '30日內最大跌幅':
+        down_most.objects(mydb)
+
+    #if analysis_tool == 'Growth Rate':
+        #growth.objects(ticker, mydb)
