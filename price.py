@@ -11,7 +11,7 @@ def objects(ticker, mydb):
     subtract_days = timedelta(days = 365 * num_years + 30 * num_months + num_days)
     startdate = datetime.today() - subtract_days
     startdate = startdate.strftime("%Y-%m-%d") 
-    query = "SELECT day, open, high, low, close, volume FROM history_stock_data WHERE (ticker= ticker AND day > '"+startdate+"') ORDER BY day DESC"
+    query = "SELECT day, open, high, low, close, volume FROM history_stock_data WHERE (ticker='"+ticker+"' AND day > '"+startdate+"') ORDER BY day DESC"
     mycursor.execute(query)
     result = mycursor.fetchall()
     DF = pd.DataFrame(result, columns=['Date','Open','High','Low','Close','Volume'])
