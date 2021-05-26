@@ -7,6 +7,7 @@ import mysql.connector
 import fetch
 import description
 import price
+import growth
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -114,6 +115,6 @@ if option == 'Begin Analyzing':
         price.objects(ticker, mydb)
 
     if analysis_tool == 'Growth Rate':
-        pass
+        growth.objects(ticker, mydb)
     
     
