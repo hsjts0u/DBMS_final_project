@@ -16,13 +16,16 @@ def objects(ticker, mydb):
     query = "SELECT day, open, high, low, close, volume FROM history_stock_data WHERE (ticker='"+ticker+"' AND day > '"+startdate+"') ORDER BY day DESC"
     mycursor.execute(query)
     result = mycursor.fetchall()
+
     DF = pd.DataFrame(result, columns=['Date','Open','High','Low','Close','Volume'])
+    DF['MA5'] = DF['Close'].rolling(5).mean()
+    DF['MA20'] = DF['Close'].rolling(20).mean()
     layout = go.Layout(title='Candlestick', width=800, height=600)
     fig2 = px.line(DF, x='Date', y='Close',title='Time Series', width=800, height=600)
-    fig = go.Figure(layout=layout)
-    fig.add_trace(go.Candlestick(x=DF['Date'], open=DF['Open'], high=DF['High'], low=DF['Low'], close=DF['Close']))
+    fig = go.Figure(data=[go.Candlestick(x=DF['Date'], open=DF['Open'], high=DF['High'], low=DF['Low'], close=DF['Close'], name='Candlestick'), go.Scatter(x=DF['Date'], y=DF['MA5'], line=dict(color='orange', width=1), name='MA5'), go.Scatter(x=DF['Date'], y=DF['MA20'], line=dict(color='blue', width=1), name='MA20')],layout=layout)
     DF.reset_index(inplace=False)
     DF.set_index("Date", inplace=True)
+
     st.plotly_chart(fig2)
     st.plotly_chart(fig)
     st.table(DF)
