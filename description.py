@@ -41,7 +41,7 @@ def objects(ticker, mydb):
         st.header(f'News on {ticker}')
         googlenews = GoogleNews('en')
         googlenews.search(ticker)
-        for i in range(3):
+        for i in range(min(5, len(googlenews.results()))):
             st.subheader(googlenews.results()[i]['title'])
             st.write(googlenews.results()[i]['link'])
     
