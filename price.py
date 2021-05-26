@@ -28,5 +28,7 @@ def objects(ticker, mydb):
 
     st.plotly_chart(fig2)
     st.plotly_chart(fig)
+    del DF['MA5']
+    del DF['MA20']
     st.table(DF)
     
