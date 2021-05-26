@@ -6,9 +6,9 @@ from datetime import timedelta, datetime
 
 def objects(ticker, mydb):
     st.header('Historical Prices')
-    num_days = st.sidebar.slider('Number of days', 0, 30, 0)
-    num_months = st.sidebar.slider('Number of months', 1, 12, 1)
     num_years = st.sidebar.slider('Number of years', 0, 20, 0)
+    num_months = st.sidebar.slider('Number of months', 1, 12, 1)
+    num_days = st.sidebar.slider('Number of days', 0, 30, 0)
     mycursor = mydb.cursor()
     subtract_days = timedelta(days = 365 * num_years + 30 * num_months + num_days)
     startdate = datetime.today() - subtract_days
