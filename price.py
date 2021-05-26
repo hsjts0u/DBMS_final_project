@@ -1,4 +1,5 @@
 import streamlit as st
+import plotly.graph_objects as go
 import pandas as pd
 from datetime import timedelta, datetime
 
@@ -13,7 +14,12 @@ def objects(ticker, mydb):
     query = "SELECT day, open, high, low, close, volume FROM history_stock_data WHERE (ticker= ticker AND day > '"+startdate+"') ORDER BY day DESC"
     mycursor.execute(query)
     result = mycursor.fetchall()
-    DF = pd.DataFrame(result, columns=['Day','Open','High','Low','Close','Volume'])
-    st.bar_chart(DF)
+    DF = pd.DataFrame(result, columns=['Date','Open','High','Low','Close','Volume'])
+    fig = go.Figure()
+    fig.add_trace(go.Candlestick(x=DF['Date'], open=DF['Open'], high=DF['High'], low=DF['Low'], close=DF['Close']))
+    DF.reset_index(inplace=False)
+    DF.set_index("Date", inplace=True)
+    st.line_chart(DF["Close"])
+    st.plotly_chart(fig)
     st.table(DF)
     
