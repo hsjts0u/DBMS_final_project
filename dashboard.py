@@ -7,7 +7,7 @@ import mysql.connector
 import fetch
 import description
 import price
-import prediction
+#import prediction
 import growth
 import up_most
 import down_most
@@ -26,7 +26,7 @@ st.title('Stock Analysis')
 
 st.sidebar.title('Options')
 
-option = st.sidebar.selectbox('Action', ('Start Here', 'Big Picture', 'Begin Analyzing'))
+option = st.sidebar.selectbox('Action', ('Start Here', 'Explore','Big Picture', 'Begin Analyzing'))
 
 
 
@@ -73,7 +73,8 @@ if option == 'Start Here':
                 host=host,
                 user=user,
                 password=password,
-                database=dbname
+                database=dbname,
+                allow_local_infile=True
             )
             mycursor = mydb.cursor()
             
@@ -82,9 +83,11 @@ if option == 'Start Here':
             db_objects.append(mycursor)
             for table in tables.tables:
                 mycursor.execute(table)
+            mydb.commit()
             st.success("Creation and Connection Succesful !")
-        except:
-            st.error("Oops! An error occurred along the way ...")
+        except mysql.connector.Error as err:
+            st.error("""Oops! An error occurred along the way ... 
+                        {}""".format(err))
 
 if option == 'Begin Analyzing':
     ### retrieve db and cursor
@@ -121,7 +124,8 @@ if option == 'Begin Analyzing':
     if analysis_tool == 'Growth Rate':
         growth.objects(ticker, mydb)
     if analysis_tool == 'Prediction':
-    	prediction.objects(ticker, mydb)
+    	#prediction.objects(ticker, mydb)
+    	pass
     
 if option == 'Big Picture': 
     ### retrieve db and cursor
@@ -157,3 +161,7 @@ if option == 'Big Picture':
 
     #if analysis_tool == 'Growth Rate':
         #growth.objects(ticker, mydb)
+
+
+if option == 'Explore':
+    st.header('Explore')

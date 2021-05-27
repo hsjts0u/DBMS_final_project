@@ -60,8 +60,18 @@ tables = (
     """
     CREATE TABLE stock_list(
     ticker varchar(100),
-    country varchar(100),
-    primary key (ticker)
+    name varchar(100),
+    exchange varchar(20),
+    category_name varchar(100),
+    country varchar(50),
+    primary key (ticker, exchange)
     )
+    """,
+    """
+    load data local infile './data/tickers.csv'
+    into table stock_list
+    fields terminated by ','
+    lines terminated by '\n'
+    ignore 1 lines
     """
     )
