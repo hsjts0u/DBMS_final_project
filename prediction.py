@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 plt.style.use('fivethirtyeight')
 from matplotlib.dates import DateFormatter
+import matplotlib.cbook as cbook
+
 
 def objects(ticker, mydb):
 
@@ -73,37 +75,17 @@ def objects(ticker, mydb):
     valid = data[training_data_len:]
     valid['Predictions'] = predictions
 
+    x = ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021']
+    xi = list(range(len(x)))
+    plt.title = 'Model'
 
-
-x_data = data['day']
-y_data = train['Close']
-
-def lineplot(x_data, y_data, x_label="Date", y_label="Close Price", title="Predictions"):
+    plt.xlabel('Date', fontsize = 18)
+    plt.ylabel('Close Price', fontsize = 18)
+    plt.xticks(xi, x)
     plt.plot(train['Close'])
     plt.plot(valid[['Close','Predictions']])
-    myFmt = mdates.DateFormatter('%d')
-    ax.xaxis.set_major_formatter(myFmt)
+    
     st.pyplot(plt)
-
-
-
-x_data = df['Product Type']
-y_data = df['Total Amount']
-
-def lineplot(x_data, y_data, x_label="Product Type", y_label="Total Amount", title="Sales"):
-    __, ax = plt.subplots()
-
-    ax.plot(x_data, y_data, lw=3, color ='#539caf', alpha =1)
-
-    ax.set_title(title)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-
-lineplot(x_data, y_data)
-
-
-
-
 
 
     
