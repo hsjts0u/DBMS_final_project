@@ -12,6 +12,7 @@ import growth
 import up_most
 import down_most
 import requests
+import explore
 # MySQL connection objects
 
 @st.cache(allow_output_mutation=True)
@@ -162,6 +163,12 @@ if option == 'Big Picture':
     #if analysis_tool == 'Growth Rate':
         #growth.objects(ticker, mydb)
 
-
 if option == 'Explore':
     st.header('Explore')
+    try:
+        mydb = db_objects[0]
+        mycursor = db_objects[1]
+    except:
+        st.sidebar.error("Connect to a database first")
+
+    explore.objects(mydb)

@@ -70,7 +70,7 @@ tables = (
     """
     load data local infile './data/tickers.csv'
     into table stock_list
-    fields terminated by ','
+    fields terminated by ';'
     lines terminated by '\n'
     ignore 1 lines
     """
