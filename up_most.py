@@ -25,7 +25,8 @@ def objects(mydb):
                 """
         mycursor.execute(query)
         result = mycursor.fetchall()
-        DF = pd.DataFrame(result, columns=['ticker','increase_rate'])
+        DF = pd.DataFrame(result, columns=['ticker','increase_rate(%)'])
+        DF.set_index('ticker',inplace=True)
         st.table(DF)
     except:
         st.error(f"There is no data in your database, try pressing the quick start button.")

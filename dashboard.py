@@ -11,6 +11,7 @@ import price
 import growth
 import up_most
 import down_most
+import show_all
 import requests
 import explore
 # MySQL connection objects
@@ -152,8 +153,10 @@ if option == 'Big Picture':
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
     
-    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('30日內最大漲幅', '30日內最大跌幅', 'Growth Rate', 'Prediction'))
+    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('SP500今日收盤價','30日內最大漲幅', '30日內最大跌幅','Prediction'))
     
+    if analysis_tool == 'SP500今日收盤價':
+        show_all.objects(mydb)
     if analysis_tool == '30日內最大漲幅':
         up_most.objects(mydb)
     
