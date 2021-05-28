@@ -6,8 +6,8 @@ from datetime import timedelta, datetime
 
 def objects(mydb):
     mycursor = mydb.cursor() 
-    st.header('SP500的今日收盤價和漲跌幅')
-    st.write('資料為最近兩次開盤日')
+    st.header('SP500 Trend and Close Price')
+    st.write('Data from two of the most recent market open days')
     try:        
         query = """
         SELECT test.ticker, test.close, ROUND((test.close - test2.close) / test.close * 100, 2) as increase_rate

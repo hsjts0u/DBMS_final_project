@@ -14,8 +14,8 @@ import down_most
 import show_all
 import requests
 import explore
-# MySQL connection objects
 
+# MySQL connection objects
 @st.cache(allow_output_mutation=True)
 def db_cursor_cache():
     return []
@@ -28,7 +28,7 @@ st.title('Stock Analysis')
 
 st.sidebar.title('Options')
 
-option = st.sidebar.selectbox('Action', ('Start Here', 'Explore','Big Picture', 'Begin Analyzing'))
+option = st.sidebar.selectbox('Action', ('Start Here', 'Explore', 'Big Picture', 'Analyze'))
 
 
 
@@ -91,7 +91,7 @@ if option == 'Start Here':
             st.error("""Oops! An error occurred along the way ... 
                         {}""".format(err))
 
-if option == 'Begin Analyzing':
+if option == 'Analyze':
     ### retrieve db and cursor
     try:
         mydb = db_objects[0]
@@ -111,9 +111,6 @@ if option == 'Begin Analyzing':
             fetch._fetch_history(ticker, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
-    
-    #if st.sidebar.button("Show me a random company !"):
-    #    st.sidebar.success("Now showing data for a random company")
         
     analysis_tool = st.sidebar.selectbox('Analysis Tools', ('Company Description', 'Historical Prices', 'Growth Rate', 'Prediction'))
     
@@ -125,9 +122,9 @@ if option == 'Begin Analyzing':
 
     if analysis_tool == 'Growth Rate':
         growth.objects(ticker, mydb)
+    
     if analysis_tool == 'Prediction':
-    	#prediction.objects(ticker, mydb)
-    	pass
+        pass
     
 if option == 'Big Picture': 
     ### retrieve db and cursor
@@ -145,26 +142,25 @@ if option == 'Big Picture':
 
     data = pd.read_html(request.text)[0]
     stock_list = data.Symbol.apply(lambda x: x.replace('.', '-'))
-    #st.write(stock_list)
-    if st.sidebar.button("Quick start", help = 'Get the recent 30 days data from SP500'):
+
+    if st.sidebar.button("Quick start", help = 'Get 30 days of the most recent data from the SP500'):
         try:
             for i in stock_list:
                 fetch._fetch_recent(i, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
     
-    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('SP500今日收盤價','30日內最大漲幅', '30日內最大跌幅'))
+    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('SP500 Close Price today', '30 Day Largest Uptrend', '30 Day Largest Downtrend'))
     
-    if analysis_tool == 'SP500今日收盤價':
+    if analysis_tool == 'SP500 Close Price today':
         show_all.objects(mydb)
-    if analysis_tool == '30日內最大漲幅':
+    
+    if analysis_tool == '30 Day Largest Uptrend':
         up_most.objects(mydb)
     
-    if analysis_tool == '30日內最大跌幅':
+    if analysis_tool == '30 Day Largest Downtrend':
         down_most.objects(mydb)
 
-    #if analysis_tool == 'Growth Rate':
-        #growth.objects(ticker, mydb)
 
 if option == 'Explore':
     st.header('Explore')

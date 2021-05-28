@@ -6,7 +6,7 @@ from datetime import timedelta, datetime
 
 def objects(mydb):
     mycursor = mydb.cursor() 
-    st.header('30日內最大漲幅')
+    st.header('30 Day Largest Uptrend')
     try:
         query = """
         SELECT test.ticker, ROUND((test.close - test2.close) / test.close * 100, 2) as increase_rate
