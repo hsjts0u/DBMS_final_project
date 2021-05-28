@@ -9,9 +9,7 @@ import description
 import price
 #import prediction
 import growth
-import up_most
-import down_most
-import show_all
+import big_picture
 import requests
 import explore
 
@@ -135,31 +133,49 @@ if option == 'Big Picture':
         st.sidebar.error("Connect to a database first")
     
     ###show the recent stock market
+    #SP500
     url = 'https://www.slickcharts.com/sp500'
     headers = {"User-Agent" : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
-
     request = requests.get(url, headers = headers)
-
     data = pd.read_html(request.text)[0]
     stock_list = data.Symbol.apply(lambda x: x.replace('.', '-'))
-
-    if st.sidebar.button("Quick start", help = 'Get 30 days of the most recent data from the SP500'):
+    
+    #TW (about 10 of them are invalid)
+    link = 'https://quality.data.gov.tw/dq_download_json.php?nid=11549&md5_url=bb878d47ffbe7b83bfc1b41d0b24946e'
+    r = requests.get(link)
+    data = pd.DataFrame(r.json())
+    TW_stock_list = data.證券代號
+    
+    select_kind = st.sidebar.selectbox("Quick start", ('NULL','TW', 'SP500'), help = 'Get stock data within 30 days')
+    
+    if select_kind == 'SP500':
         try:
             for i in stock_list:
                 fetch._fetch_recent(i, mydb, mycursor)
         except mysql.connector.Error as err:
             st.sidebar.error("Something went wrong: {}".format(err))
     
-    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('SP500 Close Price today', '30 Day Largest Uptrend', '30 Day Largest Downtrend'))
+    if select_kind == 'TW':
+        try:
+            for i in TW_stock_list:
+                stock_id = i + '.TW'
+                fetch._fetch_recent_tw(stock_id, mydb, mycursor)
+        except mysql.connector.Error as err:
+            st.sidebar.error("Something went wrong: {}".format(err))
+    analysis_tool = st.sidebar.selectbox('Analysis Tools', ('TW Stocks today','SP500 today', '30 Day Largest Uptrend(TW)', '30 Day Largest Uptrend(SP500)','30 Day Largest Downtrend(TW)','30 Day Largest Downtrend(SP500)'))
     
-    if analysis_tool == 'SP500 Close Price today':
-        show_all.objects(mydb)
-    
-    if analysis_tool == '30 Day Largest Uptrend':
-        up_most.objects(mydb)
-    
-    if analysis_tool == '30 Day Largest Downtrend':
-        down_most.objects(mydb)
+    if analysis_tool == 'TW Stocks today':
+        big_picture.show_all_TW(mydb)
+    if analysis_tool == 'SP500 today':
+        big_picture.show_all_SP500(mydb)
+    if analysis_tool == '30 Day Largest Uptrend(TW)':
+        big_picture.up_most_TW(mydb)   
+    if analysis_tool == '30 Day Largest Uptrend(SP500)':
+        big_picture.up_most_SP500(mydb)
+    if analysis_tool == '30 Day Largest Downtrend(TW)':
+        big_picture.down_most_TW(mydb)
+    if analysis_tool == '30 Day Largest Downtrend(SP500)':
+        big_picture.down_most_SP500(mydb)
 
 
 if option == 'Explore':
