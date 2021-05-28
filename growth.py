@@ -14,8 +14,15 @@ def objects(ticker, mydb):
     
     df = pd.DataFrame(result, columns=['year','earning'])
     
-    fig = go.Figure(data=[go.Bar(x=df['year'], y=df['earning'])])
+    fig = go.Figure()
+    df.year = pd.to_datetime(df.year, format='%Y')
     fig.update_layout(title='Earnings')
+    fig.add_trace(go.Bar(
+        x=df["year"], y=df["earning"],
+        xperiod="M12",
+        xperiodalignment="middle"
+    ))
+    fig.update_xaxes(showgrid=True, ticklabelmode="period")
     st.plotly_chart(fig)
     
     query = "SELECT year, revenue FROM revenue_data WHERE ticker='"+ticker+"' ORDER BY year DESC"
@@ -24,8 +31,15 @@ def objects(ticker, mydb):
     
     df = pd.DataFrame(result, columns=['year','revenue'])
     
-    fig = go.Figure(data=[go.Bar(x=df['year'], y=df['revenue'])])
+    fig = go.Figure()
+    df.year = pd.to_datetime(df.year, format='%Y')
     fig.update_layout(title='Revenue')
+    fig.add_trace(go.Bar(
+        x=df["year"], y=df["revenue"],
+        xperiod="M12",
+        xperiodalignment="middle"
+    ))
+    fig.update_xaxes(showgrid=True, ticklabelmode="period")
     st.plotly_chart(fig)
     
     query = """
