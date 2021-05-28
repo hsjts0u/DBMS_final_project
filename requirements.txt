@@ -1,3 +1,5 @@
 streamlit
 yfinance
 mysql-connector-python
+
+mysql> SET GLOBAL local_infile=1; get data for stock_list
