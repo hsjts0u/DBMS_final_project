@@ -12,12 +12,12 @@ def objects(mydb):
         SELECT test.ticker, ROUND((test.close - test2.close) / test.close * 100, 2) as decrease_rate
         FROM
             (SELECT *
-            FROM history_stock_data
-            WHERE day = (SELECT day FROM history_stock_data WHERE day >= (SELECT CURDATE() - interval 30 day) ORDER BY day ASC Limit 1)
+            FROM SP500_stock_data
+            WHERE day = (SELECT day FROM SP500_stock_data WHERE day >= (SELECT CURDATE() - interval 30 day) ORDER BY day ASC Limit 1)
             ) as test,
             (SELECT *
-            FROM history_stock_data
-            WHERE day = (SELECT day FROM history_stock_data ORDER BY day DESC Limit 1)
+            FROM SP500_stock_data
+            WHERE day = (SELECT day FROM SP500_stock_data ORDER BY day DESC Limit 1)
             ) as test2
         WHERE test.ticker = test2.ticker and  ROUND((test.close - test2.close) / test.close * 100, 2) < 0
         ORDER BY decrease_rate ASC
