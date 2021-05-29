@@ -7,7 +7,7 @@ import mysql.connector
 import fetch
 import description
 import price
-#import prediction
+import prediction
 import growth
 import big_picture
 import requests
@@ -122,7 +122,7 @@ if option == 'Analyze':
         growth.objects(ticker, mydb)
     
     if analysis_tool == 'Prediction':
-        pass
+        prediction.objects(ticker, mydb)
     
 if option == 'Big Picture': 
     ### retrieve db and cursor

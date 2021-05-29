@@ -1,168 +1,75 @@
 import streamlit as st
-import plotly.graph_objects as go
+from datetime import date
 import pandas as pd
-from datetime import timedelta, datetime
-
-import math
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from keras.models import Sequential
-from keras.layers import Dense, LSTM
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-plt.style.use('fivethirtyeight')
-from matplotlib.dates import DateFormatter
-import matplotlib.cbook as cbook
+import yfinance as yf
+from fbprophet import Prophet
+from fbprophet.plot import plot_plotly
+from plotly import graph_objs as go
 
 
 def objects(ticker, mydb):
 
+    st.header('Predict all stock prices in your database')
     mycursor = mydb.cursor()
-    
-    subtract_days = timedelta(days = 3650)
-    
-    startdate = datetime.today() - subtract_days
-    startdate = startdate.strftime("%Y-%m-%d") 
-    
-    query = "SELECT day, close FROM history_stock_data WHERE (ticker='"+ticker+"' AND day > '"+startdate+"') ORDER BY day ASC"
-    
+    query = "select distinct ticker from financial;"
     mycursor.execute(query)
-    result = mycursor.fetchall()
+    stocks = mycursor.fetchall()
+
+    new =[]
+    for i, s in enumerate(stocks):
+        new.append(stocks[i][0])
     
-    data = pd.DataFrame(result, columns=["day", "Close"])
-    data_copy = data
-      
-    data = data.filter(['Close'])
-    dataset = data.values
-    training_data_len = math.ceil(len(dataset) * .8)
-    scaler = MinMaxScaler(feature_range=(0,1))
-    scaled_data = scaler.fit_transform(dataset)
-    train_data = scaled_data[0:training_data_len, :]
-    x_train = []
-    y_train = []
-    for i in range(60, len(train_data)):
-        x_train.append(train_data[i-60:i,0])
-        y_train.append(train_data[i,0])
-    x_train, y_train = np.array(x_train), np.array(y_train)
-    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+    selected_stock = st.selectbox('Select a ticker', new)
 
-    model = Sequential()
-    model.add(LSTM(50, return_sequences=True, input_shape = (60,1)))
-    model.add(LSTM(50, return_sequences=False))
-    model.add(Dense(25))
-    model.add(Dense(1))
-        
-        
-    model.compile(optimizer='adam', loss = 'mean_squared_error')
-    model.fit(x_train, y_train, batch_size=1, epochs=1)
-        
-    test_data = scaled_data[training_data_len-60: , :]
-    x_test = []
-    y_test = dataset[training_data_len: , :]
-    for i in range(60, len(test_data)):
-        x_test.append(test_data[i-60:i,0])
-      
-    x_test = np.array(x_test)
-      
-    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
-      
-    predictions = model.predict(x_test)
-
-    predictions = scaler.inverse_transform(predictions)
-
-
-    train = data[:training_data_len]
-    valid = data[training_data_len:]
-    valid['Predictions'] = predictions
-
-    fig, ax = plt.subplots()
-    ax.plot('day', 'Close', data=data_copy)
-
-    # Major ticks every 6 months.
-    fmt_half_year = mdates.MonthLocator(interval=6)
-    ax.xaxis.set_major_locator(fmt_half_year)
-
-    # Minor ticks every month.
-    fmt_month = mdates.MonthLocator()
-    ax.xaxis.set_minor_locator(fmt_month)
-
-    # Text in the x axis will be displayed in 'YYYY-mm' format.
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-
-    # Round to nearest years.
-    datemin = np.datetime64(data_copy['day'][0], 'Y')
-    datemax = np.datetime64(data_copy['day'][21], 'Y') + np.timedelta64(1, 'Y')
-    ax.set_xlim(datemin, datemax)
-
-    # Format the coords message box, i.e. the numbers displayed as the cursor moves
-    # across the axes within the interactive GUI.
-    ax.format_xdata = mdates.DateFormatter('%Y-%m')
-    ax.format_ydata = lambda x: f'${x:.2f}'  # Format the price.
-    ax.grid(True)
-
-    # Rotates and right aligns the x labels, and moves the bottom of the
-    # axes up to make room for them.
-    fig.autofmt_xdate()
+    n_years = st.slider('Years of prediction:', 1, 4)
+    period = n_years * 365
     
-    st.pyplot(plt)
+    
+    data_load_state = st.text('Loading data...')
+    data = load_data(selected_stock)
+    data_load_state.text('Loading data... done!')
+
+    st.subheader('Historical stock price data')
+    st.write(data.tail())
 
 
+    plot_raw_data(data)
 
+    # Predict forecast with Prophet.
+    df_train = data[['Date','Close']]
+    df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 
+    m = Prophet()
+    m.fit(df_train)
+    future = m.make_future_dataframe(periods=period)
+    forecast = m.predict(future)
 
-
-
-'''    data = data.filter(['Close'])
-    dataset = data.values
-    training_data_len = math.ceil(len(dataset) * .8)
-    scaler = MinMaxScaler(feature_range=(0,1))
-    scaled_data = scaler.fit_transform(dataset)
-    train_data = scaled_data[0:training_data_len, :]
-    x_train = []
-    y_train = []
-    for i in range(60, len(train_data)):
-        x_train.append(train_data[i-60:i,0])
-        y_train.append(train_data[i,0])
-    x_train, y_train = np.array(x_train), np.array(y_train)
-    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
-
-    model = Sequential()
-    model.add(LSTM(50, return_sequences=True, input_shape = (60,1)))
-    model.add(LSTM(50, return_sequences=False))
-    model.add(Dense(25))
-    model.add(Dense(1))
+    # Show and plot forecast
+    st.subheader('Predict data')
+    st.write(forecast.tail())
         
-        
-    model.compile(optimizer='adam', loss = 'mean_squared_error')
-    model.fit(x_train, y_train, batch_size=1, epochs=1)
-        
-    test_data = scaled_data[training_data_len-60: , :]
-    x_test = []
-    y_test = dataset[training_data_len: , :]
-    for i in range(60, len(test_data)):
-        x_test.append(test_data[i-60:i,0])
-      
-    x_test = np.array(x_test)
-      
-    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
-      
-    predictions = model.predict(x_test)
+    st.write(f'Forecast plot for {n_years} years')
+    fig1 = plot_plotly(m, forecast)
+    st.plotly_chart(fig1)
 
-    predictions = scaler.inverse_transform(predictions)
+    st.write("Forecast components")
+    fig2 = m.plot_components(forecast)
+    st.write(fig2)
 
+@st.cache
+def load_data(ticker):
+    data = yf.download(ticker, "2011-01-01", date.today().strftime("%Y-%m-%d"))
+    data.reset_index(inplace=True)
+    return data
 
-    train = data[:training_data_len]
-    valid = data[training_data_len:]
-    valid['Predictions'] = predictions
 	
-	
-	plt.figure(figsize=(16,8))
-	plt.title = 'Model'
 
-	plt.xlabel('Date', fontsize = 18)
-	plt.ylabel('Close Price', fontsize = 18)
-	plt.plot(train['Close'])
-	plt.plot(valid[['Close','Predictions']])
-	plt.show()
+
+# Plot raw data
+def plot_raw_data(data):
+	fig = go.Figure()
+	fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name="stock_open"))
+	fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name="stock_close"))
+	fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
+	st.plotly_chart(fig)
 	
-	'''
