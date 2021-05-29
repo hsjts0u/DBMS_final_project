@@ -9,25 +9,17 @@ from plotly import graph_objs as go
 
 def objects(ticker, mydb):
 
-    st.header('Predict all stock prices in your database')
-    mycursor = mydb.cursor()
-    query = "select distinct ticker from financial;"
-    mycursor.execute(query)
-    stocks = mycursor.fetchall()
-
-    new =[]
-    for i, s in enumerate(stocks):
-        new.append(stocks[i][0])
+    st.header(f'Predict stock prices for {ticker}')
     
-    selected_stock = st.selectbox('Select a ticker', new)
+    mycursor = mydb.cursor()
 
-    n_years = st.slider('Years of prediction:', 1, 4)
+    n_years = st.sidebar.slider('Years of prediction:', 1, 4)
     period = n_years * 365
     
     
-    data_load_state = st.text('Loading data...')
-    data = load_data(selected_stock)
-    data_load_state.text('Loading data... done!')
+    #data_load_state = st.text('Loading data...')
+    data = load_data(ticker)
+    #data_load_state.text('Loading data... done!')
 
     st.subheader('Historical stock price data')
     st.write(data.tail())
@@ -62,14 +54,12 @@ def load_data(ticker):
     data.reset_index(inplace=True)
     return data
 
-	
-
 
 # Plot raw data
 def plot_raw_data(data):
-	fig = go.Figure()
-	fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name="stock_open"))
-	fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name="stock_close"))
-	fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
-	st.plotly_chart(fig)
-	
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name="stock_open"))
+    fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name="stock_close"))
+    fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
+    st.plotly_chart(fig)
+
