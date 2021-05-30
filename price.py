@@ -18,17 +18,19 @@ def objects(ticker, mydb):
     result = mycursor.fetchall()
 
     DF = pd.DataFrame(result, columns=['Date','Open','High','Low','Close','Volume'])
-    DF['MA5'] = DF['Close'].rolling(5).mean()
-    DF['MA20'] = DF['Close'].rolling(20).mean()
+    DF_temp = pd.DataFrame(result, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volumn'])
+
+    DF_temp = DF_temp.sort_index(ascending=False)
+    DF_temp['MA5'] = DF_temp['Close'].rolling(5).mean()
+    DF_temp['MA20'] = DF_temp['Close'].rolling(20).mean()
+
     layout = go.Layout(title='Candlestick', width=800, height=600)
     fig2 = px.line(DF, x='Date', y='Close',title='Time Series', width=800, height=600)
-    fig = go.Figure(data=[go.Candlestick(x=DF['Date'], open=DF['Open'], high=DF['High'], low=DF['Low'], close=DF['Close'], name='Candlestick'), go.Scatter(x=DF['Date'], y=DF['MA5'], line=dict(color='orange', width=1), name='MA5'), go.Scatter(x=DF['Date'], y=DF['MA20'], line=dict(color='blue', width=1), name='MA20')],layout=layout)
+    fig = go.Figure(data=[go.Candlestick(x=DF['Date'], open=DF['Open'], high=DF['High'], low=DF['Low'], close=DF['Close'], name='Candlestick'), go.Scatter(x=DF_temp['Date'], y=DF_temp['MA5'], line=dict(color='orange', width=1), name='MA5'), go.Scatter(x=DF_temp['Date'], y=DF_temp['MA20'], line=dict(color='blue', width=1), name='MA20')],layout=layout)
     DF.reset_index(inplace=False)
     DF.set_index("Date", inplace=True)
 
     st.plotly_chart(fig2)
     st.plotly_chart(fig)
-    del DF['MA5']
-    del DF['MA20']
     st.table(DF)
     
