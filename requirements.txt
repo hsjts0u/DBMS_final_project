@@ -4,5 +4,5 @@ mysql-connector-python
 fbprophet
 plotly
 pandas
-mumpy
+numpy
 googlenews
